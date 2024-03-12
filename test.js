@@ -4,6 +4,7 @@ let newGamebutton = document.querySelector(".newbtn"); // Corrected typo in 'que
 let msg = document.querySelector(".wow"); // Added '.' before 'wow' to indicate it's a class
 let winnerMember = document.querySelector(".win-member"); // Added '.' before 'win-member' to indicate it's a class
 let turn0 = false;
+let count = 0;
 const winners = [
   [0,1,2],
   [0,3,6],
@@ -17,6 +18,7 @@ const winners = [
 
 const resetGame = () =>
 {
+
    turn0 = false;
    enableButtons();
    winnerMember.classList.add("hide");
@@ -31,10 +33,21 @@ boxes.forEach((box) => {
         turn0 = false;
       }
       box.disabled = true;
-      checkWinner();
+      count++;
+    let isWinner =  checkWinner();
+     if(count===9 && !isWinner)
+     {
+      drawGame();
+     }
    });
  });
-
+ 
+ const drawGame = () =>
+ {
+   msg.innerText = `oops ! the game was draw`; 
+   winnerMember.classList.remove("hide");
+   disableButtons();
+ };
 const checkWinner = () => {
     for (let i of winners) {
       let pos1val = boxes[i[0]].innerText;
@@ -43,6 +56,7 @@ const checkWinner = () => {
       if (pos1val !== "" && pos2val !== "" && pos3val !== "") {
         if (pos1val == pos2val && pos2val == pos3val) {
           showWinner(pos1val);
+          return true;
         }
       }
     }
@@ -72,3 +86,4 @@ const enableButtons = () =>
 };
 newGamebutton.addEventListener("click",resetGame);
 reset.addEventListener("click",resetGame);
+
